@@ -1,0 +1,7 @@
+[package]
+name = "kermit"
+version = "0.1.0"
+authors = ["fred <fredlahde@gmail.com>"]
+
+[dependencies]
+walkdir = "2"
