@@ -1,12 +1,20 @@
+extern crate serde;
+extern crate serde_json;
 extern crate walkdir;
-mod compose;
+#[macro_use]
+extern crate failure;
 
-use compose::Scanner;
+#[macro_use]
+extern crate serde_derive;
+mod compose_runner;
+mod compose_scanner;
+
+use compose_scanner::Scanner;
 use std::env;
+
 fn main() {
     let args: Vec<String> = env::args().collect();
     let s = Scanner::default();
-    let results = s.scan(args[1].as_str());
+    let results = s.to_file(args[1].as_str(), "");
 
-    results.into_iter().for_each(|res| println!("{}", res.path));
 }
