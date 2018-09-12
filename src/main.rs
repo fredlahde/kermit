@@ -15,6 +15,11 @@ use std::env;
 fn main() {
     let args: Vec<String> = env::args().collect();
     let s = Scanner::default();
-    let results = s.to_file(args[1].as_str(), "");
 
+    let read = s.from_file("outfile");
+
+    match read {
+        Ok(results) => results.into_iter().for_each(|r| println!("{}", r.path)),
+        Err(e) => eprintln!("{}", e),
+    }
 }

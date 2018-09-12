@@ -1,7 +1,7 @@
 use failure::Error;
+use serde_json;
 use std::fs;
 use walkdir::WalkDir;
-use serde_json;
 
 pub struct Scanner {}
 
@@ -46,12 +46,19 @@ impl Scanner {
         let scan_result = self.scan(path);
         match scan_result {
             Ok(res) => {
-                let json = serde_json::to_string(&res).unwrap();
-                println!("{}", json);
+                let json = serde_json::to_string(&res)?;
+                // TODO: Do not append to file
+                fs::write(out_file, json)?;
             }
             Err(e) => return Err(format_err!("failed to serialize: {}", e)),
         }
         Ok(())
+    }
+
+    pub fn from_file(&self, in_file: &str) -> Result<Vec<ScanResult>, Error> {
+        let read = fs::read_to_string(in_file)?;
+        let result: Vec<ScanResult> = serde_json::from_str(&read)?;
+        Ok(result)
     }
 }
 
